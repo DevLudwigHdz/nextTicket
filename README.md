@@ -14,14 +14,10 @@ Boletera es una aplicación web full-stack para la compra y venta de boletos de 
 3.  [Tecnologías Utilizadas](#tecnologías-utilizadas)
 4.  [Primeros Pasos (Getting Started)](#primeros-pasos-getting-started)
     - [Prerrequisitos](#prerrequisitos)
-    - [Instalación](#instalación)
-5.  [Configuración de Supabase](#configuración-de-supabase)
-    - [Paso 1: Crear Proyecto en Supabase](#paso-1-crear-proyecto-en-supabase)
-    - [Paso 2: Configurar el Esquema de la Base de Datos](#paso-2-configurar-el-esquema-de-la-base-de-datos)
-    - [Paso 3: Configurar la Autenticación](#paso-3-configurar-la-autenticación)
-6.  [Variables de Entorno](#variables-de-entorno)
-7.  [Cómo Contribuir](#cómo-contribuir)
-8.  [Licencia](#licencia)
+    - [Instalación y Configuración](#instalación-y-configuración)
+5.  [Variables de Entorno](#variables-de-entorno)
+6.  [Cómo Contribuir](#cómo-contribuir)
+7.  [Licencia](#licencia)
 
 ---
 
@@ -83,15 +79,15 @@ La aplicación sigue una arquitectura moderna basada en el framework Next.js, ap
 
 ## Primeros Pasos (Getting Started)
 
-Sigue estos pasos para tener una copia del proyecto funcionando en tu máquina local.
+Sigue estos pasos para tener una copia del proyecto funcionando en tu máquina local para desarrollo.
 
 ### Prerrequisitos
 
 - Node.js (v18 o superior)
 - npm (o tu gestor de paquetes preferido)
-- Una cuenta de Supabase ([regístrate gratis aquí](https://supabase.com/dashboard))
+- Acceso de colaborador al proyecto de Supabase (solicítalo al administrador del repositorio si necesitas acceso directo al dashboard de Supabase).
 
-### Instalación
+### Instalación y Configuración
 
 1.  **Clona el repositorio:**
 
@@ -108,8 +104,8 @@ Sigue estos pasos para tener una copia del proyecto funcionando en tu máquina l
 
 3.  **Configura tus variables de entorno:**
 
-    - Crea una copia del archivo `.env.local` si no existe.
-    - Sigue las instrucciones en la sección [Variables de Entorno](#variables-de-entorno) para rellenar `.env.local`.
+    - El proyecto se conecta a una instancia de desarrollo compartida de Supabase. Necesitarás las claves de la API para conectar tu aplicación local.
+    - Ve a la sección [Variables de Entorno](#variables-de-entorno) para más detalles.
 
 4.  **Inicia el servidor de desarrollo:**
 
@@ -121,53 +117,27 @@ Sigue estos pasos para tener una copia del proyecto funcionando en tu máquina l
 
 ---
 
-## Configuración de Supabase
-
-Para que la aplicación funcione, necesitas configurar tu propio proyecto de Supabase.
-
-### Paso 1: Crear Proyecto en Supabase
-
-1.  Ve a tu [Dashboard de Supabase](https://supabase.com/dashboard).
-2.  Haz clic en **"New project"**.
-3.  Elige un nombre para el proyecto y genera una contraseña de base de datos segura (guárdala, la necesitarás).
-4.  Espera a que el proyecto se aprovisione.
-5.  Una vez creado, ve a **Settings > API** y copia tu **Project URL** y tu clave **`anon` (public)**. Las necesitarás para el archivo `.env.local`.
-
-### Paso 2: Configurar el Esquema de la Base de Datos
-
-Debes ejecutar los scripts SQL que definen la estructura de la base de datos y la lógica de negocio. Ve al **SQL Editor** en tu dashboard de Supabase y ejecuta los scripts necesarios en el orden correcto (creación de tablas, creación de funciones, creación de triggers). Estos scripts fueron proporcionados durante el desarrollo de este proyecto.
-
-### Paso 3: Configurar la Autenticación
-
-1.  Ve a **Authentication > Providers** en tu dashboard de Supabase.
-2.  Habilita los proveedores que desees (Email es el básico). Para proveedores sociales como Google o GitHub:
-    - Sigue las guías de Supabase para obtener el Client ID y el Client Secret desde la plataforma del proveedor.
-    - Añade la URL de redirección que te proporciona Supabase en la configuración de tu aplicación en la plataforma del proveedor (e.g., Google Cloud Console).
-3.  Ve a **Authentication > URL Configuration** y asegúrate de que:
-    - **Site URL** esté configurado como `http://localhost:3000` para desarrollo.
-    - En **Redirect URLs**, añade `http://localhost:3000/auth/callback`.
-
----
-
 ## Variables de Entorno
 
-La aplicación utiliza un archivo `.env.local` para gestionar las claves de API y otras configuraciones. **Este archivo no debe ser subido a Git.**
+La aplicación utiliza un archivo `.env.local` para gestionar las claves de API. **Este archivo no debe ser subido a Git.**
 
-Crea un archivo llamado `.env.local` en la raíz del proyecto con el siguiente contenido, reemplazando los valores con tus propias claves de Supabase:
+Para que la aplicación se conecte a la instancia de desarrollo de Supabase, necesitarás las claves del proyecto.
+
+**Solicita al administrador del repositorio que te proporcione los valores para las siguientes variables.** Deberás crear un archivo llamado `.env.local` en la raíz del proyecto y añadir el siguiente contenido:
 
 ```env
-# URL de tu proyecto de Supabase (Settings > API)
-NEXT_PUBLIC_SUPABASE_URL=https://TU_ID_DE_PROYECTO.supabase.co
+# URL de tu proyecto de Supabase (proporcionada por el admin)
+NEXT_PUBLIC_SUPABASE_URL=https://ID_DEL_PROYECTO.supabase.co
 
-# Clave anónima pública de tu proyecto (Settings > API)
-NEXT_PUBLIC_SUPABASE_ANON_KEY=TU_CLAVE_ANON_PUBLICA
+# Clave anónima pública del proyecto (proporcionada por el admin)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=LA_CLAVE_ANON_PUBLICA
 
 # URL base de tu aplicación para desarrollo
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-# Clave secreta de servicio para tareas de admin (Settings > API)
+# Clave secreta de servicio para tareas de admin (proporcionada por el admin)
 # ¡NUNCA EXPONER ESTA CLAVE EN EL CLIENTE!
-SUPABASE_SERVICE_ROLE_KEY=TU_CLAVE_SECRETA_DE_SERVICIO
+SUPABASE_SERVICE_ROLE_KEY=LA_CLAVE_SECRETA_DE_SERVICIO
 ```
 
 ---
