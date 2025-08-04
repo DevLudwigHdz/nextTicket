@@ -35,7 +35,7 @@ export default function LoginPage() {
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
           providers={["google", "github"]} // Puedes configurar los proveedores que quieras
-          redirectTo={`${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`}
+          redirectTo={`${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`}
           localization={{
             variables: {
               sign_in: {

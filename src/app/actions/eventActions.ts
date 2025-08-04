@@ -18,7 +18,21 @@ export async function createEvent(formData: FormData) {
     };
   }
 
-  // 2. Extraer y validar los datos del formulario
+  // 2. Verificar que el usuario tenga rol de admin
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError || !profile || profile.role !== "admin") {
+    return {
+      success: false,
+      message: "No tienes permisos para crear eventos. Solo los administradores pueden crear eventos.",
+    };
+  }
+
+  // 3. Extraer y validar los datos del formulario
   const rawData = {
     name: formData.get("name") as string,
     description: formData.get("description") as string,
@@ -98,4 +112,86 @@ export async function createEvent(formData: FormData) {
     message: "Evento creado con éxito",
     eventId: newEvent.id,
   };
+}
+
+// Obtener un evento por ID
+export async function getEventById(id: string) {
+  const supabase = await createSupabaseServerClientOnServer();
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) {
+    return null;
+  }
+  return data;
+}
+
+// Actualizar un evento existente
+export async function updateEvent(id: string, formData: FormData) {
+  const supabase = await createSupabaseServerClientOnServer();
+  // Verificar autenticación
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return {
+      error: { message: "No autenticado. Por favor, inicia sesión." },
+    };
+  }
+
+  // Verificar que el usuario tenga rol de admin
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError || !profile || profile.role !== "admin") {
+    return {
+      error: { message: "No tienes permisos para editar eventos. Solo los administradores pueden editar eventos." },
+    };
+  }
+
+  // Extraer y validar datos
+  const rawData = {
+    name: formData.get("name") as string,
+    description: formData.get("description") as string,
+    date: formData.get("date") as string,
+    location: formData.get("location") as string,
+    total_tickets: parseInt(formData.get("total_tickets") as string, 10),
+    ticket_price: parseFloat(formData.get("ticket_price") as string),
+    image_url: formData.get("image_url") as string,
+  };
+  if (
+    !rawData.name ||
+    !rawData.date ||
+    isNaN(rawData.total_tickets) ||
+    isNaN(rawData.ticket_price)
+  ) {
+    return {
+      error: { message: "Faltan campos obligatorios o los datos numéricos son inválidos." },
+    };
+  }
+  const eventDate = new Date(rawData.date).toISOString();
+  const { error } = await supabase
+    .from("events")
+    .update({
+      name: rawData.name,
+      description: rawData.description,
+      date: eventDate,
+      location: rawData.location,
+      total_tickets: rawData.total_tickets,
+      ticket_price: rawData.ticket_price,
+      image_url: rawData.image_url,
+    })
+    .eq("id", id);
+  if (error) {
+    return { error };
+  }
+  revalidatePath("/");
+  revalidatePath("/events");
+  revalidatePath(`/events/${id}`);
+  return { error: null };
 }

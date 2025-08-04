@@ -38,14 +38,12 @@ export default async function PromoterDashboardPage() {
 
         <div className="bg-white p-6 rounded-lg shadow">
           <h3 className="text-lg font-medium text-gray-900">
-            Acciones Rápidas
+            Información
           </h3>
           <div className="mt-4">
-            <Link href="/dashboard/promoter/create">
-              <span className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Crear Nuevo Evento
-              </span>
-            </Link>
+            <p className="text-sm text-gray-600">
+              Los eventos son creados y gestionados por los administradores. Aquí puedes ver los eventos disponibles.
+            </p>
           </div>
         </div>
 

@@ -24,3 +24,8 @@ export async function getUserProfile() {
 
   return { session, profile };
 }
+
+export async function isUserAdmin() {
+  const { profile } = await getUserProfile();
+  return profile?.role === "admin";
+}
