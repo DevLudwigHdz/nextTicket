@@ -1,8 +1,16 @@
 import EventForm from "@/components/forms/EventForm";
 import { createEvent } from "@/app/actions/eventActions";
 import Link from "next/link";
+import { isUserAdmin } from "@/lib/supabase/get-user-profile";
+import { redirect } from "next/navigation";
 
-export default function CreateEventPage() {
+export default async function CreateEventPage() {
+  const isAdmin = await isUserAdmin();
+  
+  if (!isAdmin) {
+    redirect("/unauthorized");
+  }
+
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">

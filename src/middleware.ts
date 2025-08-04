@@ -122,6 +122,15 @@ export async function middleware(request: NextRequest) {
     ) {
       return NextResponse.redirect(new URL("/unauthorized", request.url));
     }
+
+    // Proteger rutas de creación y edición de eventos - solo admin
+    if (
+      (pathname.startsWith("/dashboard/promoter/create") ||
+       pathname.startsWith("/dashboard/promoter/edit")) &&
+      role !== "admin"
+    ) {
+      return NextResponse.redirect(new URL("/unauthorized", request.url));
+    }
   }
 
   return response;

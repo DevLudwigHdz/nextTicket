@@ -58,7 +58,7 @@ export default async function EventDetailPage({
     notFound();
   }
 
-  const isOrganizer = profile && profile.id === event.organizer_id;
+  const isAdmin = profile?.role === "admin";
   const ticketsAvailable =
     (event.total_tickets ?? 0) - (event.tickets_sold ?? 0);
   const isSoldOut = ticketsAvailable <= 0;
@@ -99,11 +99,9 @@ export default async function EventDetailPage({
                   </p>
                 )}
               </div>
-              {isOrganizer && (
+              {isAdmin && (
                 <div className="mt-4 md:mt-0">
                   <Link href={`/dashboard/promoter/edit/${event.id}`}>
-                    {" "}
-                    {/* Ruta de edición futura */}
                     <span className="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
                       Editar Evento
                     </span>
